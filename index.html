@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1" />
+  <title>成果认定</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+</head>
+<body>
+  <main class="app">
+    <header class="app-header">
+      <div class="header-left">
+        <div class="logo">🧭</div>
+        <div class="title-wrap">
+          <h1>成果认定</h1>
+          <div class="subtitle">一步一步选择，快速得到结果</div>
+        </div>
+      </div>
+
+      <div class="header-controls">
+        <label class="file-label icon-btn" title="Load CSV" style="display: none;">
+          <input id="csvFile" type="file" accept="text/csv" />
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 3v10" stroke="#0b78f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 7l4-4 4 4" stroke="#0b78f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" stroke="#c7d9ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </label>
+        <button id="resetBtn" class="btn icon-btn" title="Reset">⟲</button>
+      </div>
+    </header>
+
+    <section id="intro" class="card">
+      <p>按提示点击卡片选项，自动跳转下一步.</p>
+      <p class="note"></p>
+      <button id="startBtn" class="btn primary">开始</button>
+    </section>
+
+    <section id="progressArea" class="hidden">
+        <div id="progress" class="progress">
+        <div class="progress-bar" aria-hidden="true">
+          <div id="progressFill" class="progress-fill"></div>
+        </div>
+        <div id="progressSteps" class="progress-steps" aria-hidden="true"></div>
+        <div id="progressStepLabels" class="progress-step-labels" aria-hidden="true"></div>
+        <div class="progress-label" aria-live="polite">进度： <span id="currentStep">0</span> / <span id="totalSteps">0</span></div>
+      </div>
+    </section>
+
+    <section id="stepsArea" class="hidden">
+      <div id="stepTitle" class="step-title"></div>
+      <div id="cards" class="cards"></div>
+      <div class="nav">
+        <button id="prevBtn" class="btn">上一步</button>
+        <button id="nextBtn" class="btn" disabled>下一步</button>
+      </div>
+    </section>
+
+    <section id="resultArea" class="hidden card">
+      <h2>评级：</h2>
+      <div id="resultOutput" class="result-output"></div>
+      <button id="restartBtn" class="btn">重新开始</button>
+    </section>
+
+    <footer class="footer">@2026 科研处</footer>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
