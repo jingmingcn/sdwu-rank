@@ -9,19 +9,28 @@ const state = {
 };
 
 const els = {
-  startBtn: null, csvFile: null, resetBtn: null,
+  startBtn: null, csvFile: null, resetBtn: null, paperBtn: null, bookBtn: null,
   stepsArea: null, progressArea: null, cards: null, stepTitle: null, progress: null, progressFill: null, progressSteps: null, progressStepLabels: null,
   prevBtn: null, nextBtn: null, resultArea: null, resultOutput: null, restartBtn: null,
-  intro: null
+  intro: null,
+  cardsFilter: null, filterInput: null
 };
+
+const sourceFiles = {
+  paper: 'data.csv',
+  book: 'book.csv'
+};
+
+let currentSource = 'paper';
 
 function $(id){return document.getElementById(id)}
 
 function init(){
-  els.startBtn = $('startBtn'); els.csvFile = $('csvFile'); els.resetBtn = $('resetBtn');
+  els.startBtn = $('startBtn'); els.csvFile = $('csvFile'); els.resetBtn = $('resetBtn'); els.paperBtn = $('paperBtn'); els.bookBtn = $('bookBtn');
   els.stepsArea = $('stepsArea'); els.progressArea = $('progressArea'); els.cards = $('cards'); els.stepTitle = $('stepTitle'); els.progress = $('progress');
   els.prevBtn = $('prevBtn'); els.nextBtn = $('nextBtn'); els.resultArea = $('resultArea'); els.resultOutput = $('resultOutput');
   els.restartBtn = $('restartBtn'); els.intro = $('intro');
+  els.cardsFilter = $('cardsFilter'); els.filterInput = $('filterInput');
 
   els.startBtn.addEventListener('click', ()=>startFlow());
   els.csvFile.addEventListener('change', handleFileUpload);
@@ -29,6 +38,8 @@ function init(){
   els.nextBtn.addEventListener('click', ()=>navigate(1));
   els.resetBtn.addEventListener('click', resetAll);
   els.restartBtn.addEventListener('click', resetAll);
+  els.paperBtn.addEventListener('click', ()=>switchDataSource('paper'));
+  els.bookBtn.addEventListener('click', ()=>switchDataSource('book'));
 
   els.progressFill = $('progressFill'); els.progressSteps = $('progressSteps'); els.progressStepLabels = $('progressStepLabels');
 
@@ -45,9 +56,27 @@ function handleFileUpload(e){
 }
 
 function loadDefaultCSV(){
-  fetch('data.csv').then(r=>r.text()).then(txt=>{
+  const file = sourceFiles[currentSource];
+  fetch(file).then(r=>r.text()).then(txt=>{
     Papa.parse(txt, {header:true, skipEmptyLines:true, complete:(res)=>{loadData(res.meta.fields, res.data)}})
   }).catch(()=>{/*no sample available*/});
+}
+
+function toggleDataSource(){
+  const newSource = currentSource === 'paper' ? 'book' : 'paper';
+  switchDataSource(newSource);
+}
+
+function switchDataSource(source){
+  if(source === currentSource) return;
+  currentSource = source;
+  
+  // update button states
+  els.paperBtn.classList.toggle('active', source === 'paper');
+  els.bookBtn.classList.toggle('active', source === 'book');
+  
+  resetAll();
+  loadDefaultCSV();
 }
 
 function loadData(headers, rows){
@@ -134,6 +163,19 @@ for(let i = 0; i < stepIndex; i++){
       if(state.currentStep < state.steps.length-1) navigate(1); else computeResult();
     }, 250);
   }
+
+  if(options.length>30){
+    els.cardsFilter.classList.remove('hidden');
+    els.filterInput.value = '';
+    els.filterInput.oninput = function(){
+      const filter = this.value.toLowerCase();
+      Array.from(els.cards.children).forEach(c=>{
+        c.style.display = c.textContent.toLowerCase().includes(filter) ? '' : 'none';
+      });
+    }
+  } else {
+    els.cardsFilter.classList.add('hidden');
+  }
   
   // reflect selection
   updateNav();
@@ -141,7 +183,7 @@ for(let i = 0; i < stepIndex; i++){
 }
 
 function navigate(dir){
-  if(dir>0 && state.selections[state.currentStep]==null){ alert('Please select an option to continue.'); return; }
+  if(dir>0 && state.selections[state.currentStep]==null){ alert('请选择一个选项.'); return; }
   state.currentStep += dir;
   if(state.currentStep < 0) state.currentStep = 0;
   if(state.currentStep >= state.steps.length) state.currentStep = state.steps.length-1;

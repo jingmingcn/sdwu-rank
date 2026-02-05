@@ -15,6 +15,11 @@ body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neu
 .app-header .title-wrap{line-height:1}
 .subtitle{font-size:0.78rem;color:var(--muted);margin-top:2px}
 .header-controls{display:flex;gap:8px;align-items:center}
+.source-switch-group{display:flex;align-items:center;gap:0;background:#f0f4ff;border-radius:10px;padding:4px;border:1px solid #e0e9ff}
+.switch-option{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:6px 10px;border:none;background:transparent;color:var(--muted);cursor:pointer;border-radius:8px;transition:all 200ms ease;font-size:0.85rem;font-weight:500}
+.switch-option:hover{color:var(--accent)}
+.switch-option.active{background:#fff;color:var(--accent);border:1px solid #e0e9ff;box-shadow:0 2px 4px rgba(11,120,246,0.08)}
+.switch-option svg{flex-shrink:0}
 .icon-btn{display:inline-flex;align-items:center;justify-content:center;border-radius:10px;padding:8px;background:transparent;border:1px solid transparent}
 .icon-btn svg{display:block}
 .file-label input{display:none}
@@ -25,6 +30,10 @@ body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neu
 .hidden{display:none}
 .progress{font-size:0.9rem;color:var(--muted);margin-bottom:8px}
 .step-title{font-size:1rem;font-weight:600;margin-bottom:8px}
+.filter-area{margin-bottom:10px}
+.filter-area.hidden{display:none}
+.filter-input{width:100%;padding:10px;border:1px solid #e0e9ff;border-radius:8px;font-size:0.95rem;color:#0b1220;background:#fbfdff;transition:border-color 200ms ease}
+.filter-input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 2px rgba(11,120,246,0.1)}
 .cards{display:flex;flex-wrap:wrap;gap:10px}
 .card-option{flex:1 1 calc(50% - 10px);min-width:140px;background:#fbfdff;padding:12px;border-radius:10px;border:1px solid #eef3ff;display:flex;align-items:center;justify-content:center;cursor:pointer;text-align:center}
 .card-option.selected{outline:3px solid rgba(11,120,246,0.12);border-color:var(--accent);background:linear-gradient(180deg,#fff,#f6fbff)}
@@ -55,4 +64,9 @@ body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neu
 @media (max-width:420px){
   .cards{gap:8px}
   .card-option{flex-basis:100%;min-width:unset}
+}
+
+@media (max-width:420px){
+  .app-header{flex-direction:column;align-items:flex-start;gap:8px}
+  .header-controls{width:100%;justify-content:space-between}
 }
