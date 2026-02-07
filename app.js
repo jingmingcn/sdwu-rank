@@ -116,19 +116,17 @@ function renderStep(){
   const key = state.steps[stepIndex];
   els.stepTitle.textContent = key;
 
-  // compute unique options for this column, filter by previous selections
-let options = [...new Set(state.rows.map(r=>r[key]).filter(v=>v!==''))];
-
-// Filter by previous selections
-for(let i = 0; i < stepIndex; i++){
+  _rows = state.rows;
+  for(let i = 0; i < stepIndex; i++){
     const prevKey = state.steps[i];
     const prevSel = state.selections[i];
     if(prevSel !== null){
-        options = options.filter(opt => 
-            state.rows.some(r => r[prevKey] === prevSel && r[key] === opt)
-        );
+        _rows = _rows.filter(r => r[prevKey] === prevSel);
     }
-}
+  }
+
+  // compute unique options for this column, filter by previous selections
+let options = [...new Set(_rows.map(r=>r[key]).filter(v=>v!==''))];
 
   els.cards.innerHTML = '';
   for(const opt of options){
